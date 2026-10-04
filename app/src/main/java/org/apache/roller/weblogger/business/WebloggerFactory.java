@@ -56,7 +56,7 @@ public final class WebloggerFactory {
      */
     public static Weblogger getWeblogger() {
         if (webloggerProvider == null) {
-            throw new IllegalStateException("Roller Weblogger has not been bootstrapped yet");
+            throw new IllegalStateException("Roller Weblogger has not been bootstrapped yet; call bootstrap() first");
         }
         
         return webloggerProvider.getWeblogger();
