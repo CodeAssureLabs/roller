@@ -1,0 +1,12 @@
+{
+  "path_globs": [
+    {"glob": "app/src/main/java/org/apache/roller/**/business/jpa/**", "layer": "data"},
+    {"glob": "app/src/main/java/org/apache/roller/**/business/**", "layer": "service"},
+    {"glob": "app/src/main/java/org/apache/roller/**/pojos/**", "layer": "domain"},
+    {"glob": "app/src/main/java/org/apache/roller/**/config/**", "layer": "config"},
+    {"glob": "app/src/main/java/org/apache/roller/**/ui/**", "layer": "api"},
+    {"glob": "app/src/main/java/org/apache/roller/**/webservices/**", "layer": "api"},
+    {"glob": "app/src/main/java/org/apache/roller/**/util/**", "layer": "utils"},
+    {"glob": "app/src/test/**", "layer": "tests"}
+  ]
+}
