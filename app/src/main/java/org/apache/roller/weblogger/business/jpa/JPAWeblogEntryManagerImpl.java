@@ -760,6 +760,9 @@ public class JPAWeblogEntryManagerImpl implements WeblogEntryManager {
      */
     @Override
     public WeblogEntry getWeblogEntry(String id) throws WebloggerException {
+        if (id == null) {
+            return null;
+        }
         return (WeblogEntry)strategy.load(WeblogEntry.class, id);
     }
 

@@ -51,8 +51,10 @@ public interface WeblogEntryManager {
     
     /**
      * Get weblog entry by id.
+     *
+     * @return the entry, or null when {@code entryId} is null.
      */
-    WeblogEntry getWeblogEntry(String id) throws WebloggerException;
+    WeblogEntry getWeblogEntry(String entryId) throws WebloggerException;
 
     /**
      * Get weblog entry by id, restricted to the given weblog.
