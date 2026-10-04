@@ -181,7 +181,7 @@ public class Weblog implements Serializable {
      * Short URL safe string that uniquely identifies the website.
      */
     public String getHandle() {
-        return this.handle;
+        return handle;
     }
     
     public void setHandle(String handle) {
