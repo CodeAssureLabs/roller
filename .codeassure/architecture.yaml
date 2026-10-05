@@ -1,0 +1,37 @@
+# CodeAssure architecture manifest for this repository.
+# Layers come from .codeassure/resolved.json (path globs). Each layer lists the
+# layers it may import. Anything not listed is a boundary the checker reports.
+schema_version: 1
+manifest_version: 1
+repo: CodeAssureLabs/roller
+
+layers:
+  api: [service, domain, utils, config]        # Struts 2 actions, UI core, web services
+  service: [data, domain, utils, config]       # business managers (interfaces + impls)
+  data: [domain, utils, config]                # JPA persistence (business/jpa)
+  domain: [utils, config]                      # pojos
+  utils: [config]
+  config: []
+  tests: [api, service, data, domain, utils, config]
+
+forbidden_edges:
+  - id: no-persistence-to-web
+    from: data
+    to: api
+    reason: persistence (business/jpa) must not depend on the web layer (ui, webservices)
+    check: blocking
+    severity: high
+
+invariants:
+  - id: no-ui-import-in-persistence
+    within: "app/src/main/java/**/business/jpa/**"
+    forbid_pattern: "import org\\.apache\\.roller\\.weblogger\\.ui\\."
+    reason: JPA persistence classes must not import org.apache.roller.weblogger.ui (the Struts web layer); keep persistence independent of the UI
+    check: blocking
+
+exemptions:
+  - edge: { from: data, to: service }
+    paths: ["app/src/main/java/**/business/jpa/**"]
+    reason: Roller's JPA manager implementations reach sibling managers through Weblogger (e.g. getWeblogManager()); a known, accepted dependency of the persistence layer on the service interfaces. Reviewed, not a layering cycle.
+    ratified_by: codeassure-roller-maintainers
+    ratified_at: "2026-10-05"

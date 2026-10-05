@@ -1,12 +1,76 @@
 {
+  "artifact_version": 1,
+  "source_manifest_version": 1,
+  "layer_map": {},
   "path_globs": [
-    {"glob": "app/src/main/java/org/apache/roller/**/business/jpa/**", "layer": "data"},
-    {"glob": "app/src/main/java/org/apache/roller/**/business/**", "layer": "service"},
-    {"glob": "app/src/main/java/org/apache/roller/**/pojos/**", "layer": "domain"},
-    {"glob": "app/src/main/java/org/apache/roller/**/config/**", "layer": "config"},
-    {"glob": "app/src/main/java/org/apache/roller/**/ui/**", "layer": "api"},
-    {"glob": "app/src/main/java/org/apache/roller/**/webservices/**", "layer": "api"},
-    {"glob": "app/src/main/java/org/apache/roller/**/util/**", "layer": "utils"},
-    {"glob": "app/src/test/**", "layer": "tests"}
-  ]
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/business/jpa/**",
+      "layer": "data"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/business/**",
+      "layer": "service"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/pojos/**",
+      "layer": "domain"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/config/**",
+      "layer": "config"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/ui/**",
+      "layer": "api"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/webservices/**",
+      "layer": "api"
+    },
+    {
+      "glob": "app/src/main/java/org/apache/roller/**/util/**",
+      "layer": "utils"
+    },
+    {
+      "glob": "app/src/test/**",
+      "layer": "tests"
+    }
+  ],
+  "compiled_rules": {
+    "allowed": {
+      "api": [
+        "service",
+        "domain",
+        "utils",
+        "config"
+      ],
+      "service": [
+        "data",
+        "domain",
+        "utils",
+        "config"
+      ],
+      "data": [
+        "domain",
+        "utils",
+        "config"
+      ],
+      "domain": [
+        "utils",
+        "config"
+      ],
+      "utils": [
+        "config"
+      ],
+      "config": [],
+      "tests": [
+        "api",
+        "service",
+        "data",
+        "domain",
+        "utils",
+        "config"
+      ]
+    }
+  }
 }
