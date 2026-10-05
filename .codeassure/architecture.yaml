@@ -28,3 +28,10 @@ invariants:
     forbid_pattern: "import org\\.apache\\.roller\\.weblogger\\.ui\\."
     reason: JPA persistence classes must not import org.apache.roller.weblogger.ui (the Struts web layer); keep persistence independent of the UI
     check: blocking
+
+exemptions:
+  - edge: { from: data, to: service }
+    paths: ["app/src/main/java/**/business/jpa/**"]
+    reason: Roller's JPA manager implementations reach sibling managers through Weblogger (e.g. getWeblogManager()); a known, accepted dependency of the persistence layer on the service interfaces. Reviewed, not a layering cycle.
+    ratified_by: codeassure-roller-maintainers
+    ratified_at: "2026-10-05"
