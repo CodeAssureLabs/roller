@@ -51,6 +51,7 @@ import org.apache.roller.weblogger.pojos.WeblogEntryAttribute;
 import org.apache.roller.weblogger.pojos.StatCountCountComparator;
 import org.apache.roller.util.DateUtil;
 import org.apache.roller.weblogger.business.WeblogEntryManager;
+import org.apache.roller.weblogger.ui.core.RollerContext;
 
 
 /**
@@ -201,6 +202,8 @@ public class JPAWeblogEntryManagerImpl implements WeblogEntryManager {
         }
         
         if (entry.isPublished()) {
+            LOG.info("Publishing entry " + entry.getAnchor() + " under "
+                    + RollerContext.getServletContext().getContextPath());
             // tag aggregates are updated only when entry published in order for
             // tag cloud counts to match published articles
             if (entry.getRefreshAggregates()) {
