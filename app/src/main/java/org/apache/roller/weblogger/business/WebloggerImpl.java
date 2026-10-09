@@ -218,10 +218,10 @@ public abstract class WebloggerImpl implements Weblogger {
     /**
      * 
      * 
-     * @see org.apache.roller.weblogger.business.Weblogger#getWeblogEntryManager()
+     * @see org.apache.roller.weblogger.business.Weblogger#getEntryManager()
      */
     @Override
-    public WeblogEntryManager getWeblogEntryManager() {
+    public WeblogEntryManager getEntryManager() {
         return weblogEntryManager;
     }
     
