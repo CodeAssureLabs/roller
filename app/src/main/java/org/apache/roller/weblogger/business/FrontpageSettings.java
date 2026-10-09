@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.roller.weblogger.WebloggerException;
 import org.apache.roller.weblogger.pojos.RuntimeConfigProperty;
 import org.apache.roller.weblogger.pojos.Weblog;
+import org.apache.roller.weblogger.ui.core.RollerSession;
 
 /**
  * Reads and writes the site frontpage weblog settings.
@@ -34,6 +35,9 @@ public final class FrontpageSettings {
 
     public static final String HANDLE_PROPERTY = "site.frontpage.weblog.handle";
     public static final String AGGREGATED_PROPERTY = "site.frontpage.weblog.aggregated";
+
+    /** Session attribute under which the UI keeps the logged-in RollerSession. */
+    public static final String SESSION_ATTRIBUTE = RollerSession.ROLLER_SESSION;
 
     private FrontpageSettings() {
     }
