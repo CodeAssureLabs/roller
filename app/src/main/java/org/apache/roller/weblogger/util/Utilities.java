@@ -732,13 +732,10 @@ public class Utilities {
      * @return
      */
     private static String stripLineBreaks(String str) {
-        // TODO: use a string buffer, ignore case !
-        str = str.replace("<br>", "");
-        str = str.replace("<br/>", "");
-        str = str.replace("<br />", "");
-        str = str.replace("<p></p>", "");
-        str = str.replace("<p/>", "");
-        str = str.replace("<p />", "");
+        // TODO: ignore case !
+        for (String token : new String[] {"<br>", "<br/>", "<br />", "<p></p>", "<p/>", "<p />"}) {
+            str = str.replace(token, "");
+        }
         return str;
     }
 
