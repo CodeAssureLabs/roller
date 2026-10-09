@@ -32,9 +32,12 @@ public final class UUIDGenerator {
     
     /**
      * Generate a new UUID.
+     *
+     * @param prefix text prepended to the generated value, so ids of different
+     *               object types can be told apart in logs
      */
-    public static String generateUUID() {
-        return UUID.randomUUID().toString();
+    public static String generateUUID(String prefix) {
+        return prefix + UUID.randomUUID().toString();
     }
     
 }
