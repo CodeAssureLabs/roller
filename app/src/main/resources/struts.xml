@@ -436,6 +436,12 @@
             <allowed-methods>execute</allowed-methods>
         </action>
 
+        <action name="entriesBulkTag"
+                class="org.apache.roller.weblogger.ui.struts2.editor.EntriesBulkTag">
+            <result name="success" type="chain">entries</result>
+            <allowed-methods>execute</allowed-methods>
+        </action>
+
         <action name="comments"
                 class="org.apache.roller.weblogger.ui.struts2.editor.Comments">
             <result name="list" type="tiles">.Comments</result>
