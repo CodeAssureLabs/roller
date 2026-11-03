@@ -101,6 +101,19 @@
 
 <s:if test="!createNew">
 
+    <s:if test="!createNew">
+        <h3><s:text name="planetGroupSubs.import.title"/></h3>
+        <p><s:text name="planetGroupSubs.import.desc"/></p>
+        <s:form action="planetGroupSubs!importOpml" method="POST" enctype="multipart/form-data"
+                theme="bootstrap" cssClass="form-horizontal">
+            <s:hidden name="salt"/>
+            <s:hidden name="group.handle"/>
+            <s:file name="opmlFile" accept=".opml,.xml,text/xml,text/x-opml"
+                    label="%{getText('planetGroupSubs.import.file')}"/>
+            <s:submit value="%{getText('planetGroupSubs.import.button')}" cssClass="btn btn-default"/>
+        </s:form>
+    </s:if>
+
     <h3><s:text name="planetGroupSubs.subscriptions"/></h3>
     <s:text name="planetGroupSubs.subscriptionDesc" />
 

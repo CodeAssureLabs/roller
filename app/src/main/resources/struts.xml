@@ -307,7 +307,7 @@
         <action name="planetGroupSubs"
                 class="org.apache.roller.weblogger.planet.ui.PlanetGroupSubs">
             <result name="list" type="tiles">.PlanetGroupSubs</result>
-            <allowed-methods>execute,deleteSubscription,saveGroup,saveSubscription</allowed-methods>
+            <allowed-methods>execute,deleteSubscription,importOpml,saveGroup,saveSubscription</allowed-methods>
         </action>
         
         <action name="planetGroups"
