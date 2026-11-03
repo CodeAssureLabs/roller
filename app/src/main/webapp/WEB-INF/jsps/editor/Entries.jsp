@@ -60,9 +60,14 @@
     <s:text name="weblogEntryQuery.scheduled" />&nbsp;&nbsp;
 </p>
 
+<s:form action="entriesBulkTag" theme="simple" id="bulkTagForm">
+<s:hidden name="salt"/>
+<s:hidden name="weblog" value="%{actionWeblog.handle}"/>
+
 <table class="rollertable table table-striped" width="100%">
 
 <tr>
+    <th class="rollertable" width="2%"><input type="checkbox" id="bulkTagSelectAll"/></th>
     <th class="rollertable" width="3%"> </th>
     <th class="rollertable" width="7%">
         <s:text name="weblogEntryQuery.pubTime" />
@@ -93,6 +98,11 @@
     <s:else>
         <tr>
     </s:else>
+
+    <td>
+        <input type="checkbox" class="bulk-tag-select" name="selectedEntries"
+               value="<s:property value='#post.id'/>"/>
+    </td>
 
     <td>
         <s:url var="editUrl" action="entryEdit">
@@ -153,6 +163,23 @@
 </s:iterator>
 
 </table>
+
+<div class="form-inline" style="margin-bottom: 1em">
+    <label for="bulkAddTags"><s:text name="entriesBulkTag.addTags"/></label>
+    <s:textfield name="addTags" id="bulkAddTags" cssClass="form-control" size="25"/>
+    <label for="bulkRemoveTags"><s:text name="entriesBulkTag.removeTags"/></label>
+    <s:textfield name="removeTags" id="bulkRemoveTags" cssClass="form-control" size="25"/>
+    <s:submit cssClass="btn btn-default" value="%{getText('entriesBulkTag.apply')}"/>
+</div>
+</s:form>
+
+<script>
+    document.getElementById('bulkTagSelectAll').addEventListener('change', function (e) {
+        document.querySelectorAll('.bulk-tag-select').forEach(function (box) {
+            box.checked = e.target.checked;
+        });
+    });
+</script>
 
 
 <%-- ============================================================= --%>
