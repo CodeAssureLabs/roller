@@ -26,11 +26,16 @@ import org.apache.roller.planet.business.fetcher.FetcherException;
 import org.apache.roller.planet.pojos.Planet;
 import org.apache.roller.planet.pojos.PlanetGroup;
 import org.apache.roller.planet.pojos.Subscription;
+import org.apache.roller.planet.util.OpmlFeedListParser;
 import org.apache.roller.weblogger.business.WebloggerFactory;
 import org.apache.roller.weblogger.pojos.GlobalPermission;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 
@@ -49,6 +54,13 @@ public class PlanetGroupSubs extends PlanetUIAction implements ServletRequestAwa
     private String subUrl = null;
 
     private Boolean createNew = null;
+
+    // OPML file uploaded by the "Import OPML" form
+    private File opmlFile = null;
+    private String opmlFileContentType = null;
+    private String opmlFileFileName = null;
+
+    private static final long MAX_OPML_BYTES = 1024 * 1024;
 
     public PlanetGroupSubs() {
         this.actionName = "planetGroupSubs";
@@ -143,6 +155,68 @@ public class PlanetGroupSubs extends PlanetUIAction implements ServletRequestAwa
             }
         }
 
+        return LIST;
+    }
+
+    /**
+     * Import every feed listed in an uploaded OPML file into the current group.
+     */
+    public String importOpml() {
+
+        if (opmlFile == null) {
+            addError("planetGroupSubs.import.noFile");
+            return LIST;
+        }
+
+        List<String> feedUrls;
+        try {
+            if (opmlFile.length() > MAX_OPML_BYTES) {
+                addError("planetGroupSubs.import.tooLarge");
+                return LIST;
+            }
+            String opml = new String(Files.readAllBytes(opmlFile.toPath()), StandardCharsets.UTF_8);
+            feedUrls = OpmlFeedListParser.parseFeedUrls(opml);
+        } catch (IOException | OpmlFeedListParser.OpmlParseException ex) {
+            log.debug("Rejected OPML upload " + opmlFileFileName, ex);
+            addError("planetGroupSubs.import.invalid", ex.getMessage());
+            return LIST;
+        }
+
+        PlanetManager pmgr = WebloggerFactory.getWeblogger().getPlanetManager();
+        FeedFetcher fetcher = WebloggerFactory.getWeblogger().getFeedFetcher();
+        int added = 0;
+        List<String> failed = new ArrayList<>();
+        for (String feedUrl : feedUrls) {
+            try {
+                Subscription sub = pmgr.getSubscription(feedUrl);
+                if (sub == null) {
+                    sub = fetcher.fetchSubscription(feedUrl);
+                    pmgr.saveSubscription(sub);
+                }
+                if (!group.getSubscriptions().contains(sub)) {
+                    group.getSubscriptions().add(sub);
+                    sub.getGroups().add(group);
+                    added++;
+                }
+            } catch (Exception ex) {
+                log.debug("Skipping feed from OPML import: " + feedUrl, ex);
+                failed.add(feedUrl);
+            }
+        }
+
+        try {
+            pmgr.saveGroup(group);
+            WebloggerFactory.getWeblogger().flush();
+        } catch (Exception ex) {
+            log.error("Error saving planet group after OPML import", ex);
+            addError("planetGroupSubs.error.duringSave", ex.getMessage());
+            return LIST;
+        }
+
+        addMessage("planetGroupSubs.import.success", Arrays.asList(added, feedUrls.size()));
+        if (!failed.isEmpty()) {
+            addError("planetGroupSubs.import.someFailed", String.join(", ", failed));
+        }
         return LIST;
     }
 
@@ -307,6 +381,30 @@ public class PlanetGroupSubs extends PlanetUIAction implements ServletRequestAwa
 
     public void setGroup(PlanetGroup group) {
         this.group = group;
+    }
+
+    public File getOpmlFile() {
+        return opmlFile;
+    }
+
+    public void setOpmlFile(File opmlFile) {
+        this.opmlFile = opmlFile;
+    }
+
+    public String getOpmlFileContentType() {
+        return opmlFileContentType;
+    }
+
+    public void setOpmlFileContentType(String opmlFileContentType) {
+        this.opmlFileContentType = opmlFileContentType;
+    }
+
+    public String getOpmlFileFileName() {
+        return opmlFileFileName;
+    }
+
+    public void setOpmlFileFileName(String opmlFileFileName) {
+        this.opmlFileFileName = opmlFileFileName;
     }
 
     public String getSubUrl() {
